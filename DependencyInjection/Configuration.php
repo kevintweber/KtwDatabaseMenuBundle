@@ -27,8 +27,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('menu_item_repository')
-                    ->isRequired()
-                    ->cannotBeEmpty()
                     ->defaultValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem')
                 ->end()
             ->end();

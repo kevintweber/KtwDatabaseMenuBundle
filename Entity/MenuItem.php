@@ -13,6 +13,7 @@ namespace kevintweber\KtwDatabaseMenuBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\Menu\FactoryInterface;
 use Knp\Menu\MenuItem as KnpMenuItem;
 
 /**
@@ -102,15 +103,15 @@ class MenuItem extends KnpMenuItem
     /**
      * Child items
      *
-     * @OneToMany(targetEntity="MenuItem", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent")
      */
     protected $children;
 
     /**
      * Parent item
      *
-     * @ManyToOne(targetEntity="MenuItem", inversedBy="children")
-     * @JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected $parent;
 
