@@ -1,0 +1,20 @@
+KtwDatabaseMenuBundle
+=====================
+
+This bundle is a simple extension of the awesome KNP Menu Bundle, where
+you can store your menu items in a database.
+
+Currently, this bundle is non-functional.
+
+## Documentation
+
+Read the [documentation for master](https://github.com/kevintweber/KtwDatabaseMenuBundle/blob/master/Resources/doc/index.md).
+
+## Authors
+
+Kevin Weber - kevintweber@gmail.com
+
+## License
+
+KtwDatabaseMenuBundle is licensed under the MIT license.  See `LICENSE` for
+more details.

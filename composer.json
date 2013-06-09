@@ -1,0 +1,28 @@
+{
+    "name": "kevintweber/ktw-database-menu-bundle",
+    "description": "Symfony bundle for extending KNPMenuBundle to store menu items in a database.",
+    "keywords": ["menu","database"],
+    "homepage": "https://github.com/kevintweber/KtwDatabaseMenuBundle",
+    "license": "MIT",
+	"type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Kevin Weber",
+            "email": "kevintweber@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.1",
+        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "doctrine/doctrine-bundle": "1.2.*",
+		"knplabs/knp-menu-bundle": "~1.1",
+		"symfony/routing": "~2.1"       
+    },
+    "autoload": {
+        "psr-0": { 
+            "kevintweber\\KtwDatabaseMenuBundle": ""
+        }
+    },
+    "target-dir": "kevintweber/KtwDatabaseMenuBundle"
+}
