@@ -30,7 +30,8 @@ class DatabaseMenuFactory extends RouteAwareFactory
 
     public function createItem($name, array $options = array())
     {
-        $item = new KtwMenuItem($name, $this);
+        $class = $this->container->getParameter('ktw_database_menu.menu_item_repository');
+        $item = new $class($name, $this);
 
         $options = $this->buildOptions($options);
         $this->configureItem($item, $options);

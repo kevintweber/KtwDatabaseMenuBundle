@@ -112,7 +112,17 @@ class MenuItem extends KnpMenuItem
      * @ManyToOne(targetEntity="MenuItem", inversedBy="children")
      * @JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent = null;
+    protected $parent;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
 
     /**
      * Constructor
@@ -122,5 +132,42 @@ class MenuItem extends KnpMenuItem
         $this->children = new ArrayCollection();
 
         parent::__construct($name, $factory);
+    }
+
+    /**
+     * Getter for 'created'.
+     *
+     * @return mixed The value of 'created'.
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Getter for 'updated'.
+     *
+     * @return mixed The value of 'updated'.
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->created = new \DateTime;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updated = new \DateTime;
     }
 }
