@@ -40,7 +40,7 @@ class MenuItem extends KnpMenuItem
     /**
      * Label to output, name is used by default
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $label = null;
 
@@ -68,7 +68,7 @@ class MenuItem extends KnpMenuItem
     /**
      * Uri to use in the anchor tag
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $uri = null;
 
@@ -103,15 +103,15 @@ class MenuItem extends KnpMenuItem
     /**
      * Child items
      *
-     * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent", cascade={"all"})
      */
     protected $children;
 
     /**
      * Parent item
      *
-     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children", cascade={"all"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent;
 
@@ -170,5 +170,15 @@ class MenuItem extends KnpMenuItem
     public function preUpdate()
     {
         $this->updated = new \DateTime;
+    }
+
+    /**
+     * Reimplementation of getChildren for PersistentCollections.
+     *
+     * @return array
+     */
+    public function getChildren()
+    {
+        return $this->children->toArray();
     }
 }

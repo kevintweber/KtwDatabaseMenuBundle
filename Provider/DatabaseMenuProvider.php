@@ -11,6 +11,7 @@
 
 namespace kevintweber\KtwDatabaseMenuBundle\Provider;
 
+use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,11 +23,17 @@ class DatabaseMenuProvider implements MenuProviderInterface
     protected $container;
 
     /**
+     * @var array
+     */
+    protected $menuItems;
+
+    /**
      * Constructor
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->menuItems = array();
     }
 
     /**
@@ -39,6 +46,10 @@ class DatabaseMenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
+        if ($menuItem = $this->hasMenuItemInCache($name)) {
+            return $menuItem;
+        }
+
         $repositoryName = $this->container()->getParameter('ktw_database_menu.menu_item_repository');
 
         $menuItem = $this->container->get('doctrine')
@@ -49,6 +60,8 @@ class DatabaseMenuProvider implements MenuProviderInterface
             throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
         }
 
+        $this->cacheMenuItem($name, $menuItem);
+
         return $menuItem;
     }
 
@@ -57,16 +70,56 @@ class DatabaseMenuProvider implements MenuProviderInterface
      *
      * @param string $name
      * @param array $options
-     * @return bool
+     * @return boolean
      */
     public function has($name, array $options = array())
     {
-        $repositoryName = $this->container()->getParameter('ktw_database_menu.menu_item_repository');
+        // Check cache first.
+        if ($this->hasMenuItemInCache($name)) {
+            return true;
+        }
+
+        $repositoryName = $this->container
+            ->getParameter('ktw_database_menu.menu_item_repository');
 
         $menuItem = $this->container->get('doctrine')
             ->getRepository($repositoryName)
             ->findOneBy(array('name' => $name));
 
-        return $menuItem !== null;
+        if ($menuItem === null) {
+            return false;
+        }
+
+        $this->cacheMenuItem($name, $menuItem);
+
+        return true;
+    }
+
+    /**
+     * Will store the menu item in memory.
+     *
+     * @param string $name
+     * @param MenuItem $menuItem
+     */
+    protected function cacheMenuItem($name, MenuItem $menuItem)
+    {
+        if (!array_key_exists($name, $this->menuItems)) {
+            $this->menuItems[$name] = $menuItem;
+        }
+    }
+
+    /**
+     * Will retrieve a cached menu item.
+     *
+     * @param string $name
+     * @return MenuItem|false False if the named menu item is not in the cache.
+     */
+    protected function hasMenuItemInCache($name)
+    {
+        if (array_key_exists($name, $this->menuItems)) {
+            return $this->menuItems[$name];
+        }
+
+        return false;
     }
 }

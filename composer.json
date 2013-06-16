@@ -1,6 +1,6 @@
 {
     "name": "kevintweber/ktw-database-menu-bundle",
-    "description": "Symfony bundle for extending KNPMenuBundle to store menu items in a database.",
+    "description": "Symfony bundle for extending KnpMenuBundle to store menu items in a database.",
     "keywords": ["menu","database"],
     "homepage": "https://github.com/kevintweber/KtwDatabaseMenuBundle",
     "license": "MIT",

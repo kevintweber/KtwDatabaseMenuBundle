@@ -9,23 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace kevintweber\KtwDatabaseMenuBundle\Menu
+namespace kevintweber\KtwDatabaseMenuBundle\Menu;
 
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem as KtwMenuItem;
-use Knp\Menu\Silex\RouteAwareFactory;
+use Knp\Menu\Silex\RouterAwareFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class DatabaseMenuFactory extends RouteAwareFactory
+class DatabaseMenuFactory extends RouterAwareFactory
 {
     protected $container;
 
     /**
      * Constructor
      */
-    public function __construct(UrlGeneratorInterface $generator, ContainerInterface $container)
+    public function __construct(UrlGeneratorInterface $generator,
+                                ContainerInterface $container)
     {
         $this->container = $container;
-        $this->generator = $generator;
+        parent::__construct($generator);
     }
 
     public function createItem($name, array $options = array())

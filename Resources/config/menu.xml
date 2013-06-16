@@ -5,18 +5,19 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="ktw_database_menu.factory.class">kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory</parameter>
-        <parameter key="ktw_database_menu.menu_provider.class">kevintweber\KtwDatabaseMenuBundle\Provider\DatabaseMenuProvider</parameter>
+        <parameter key="ktw_database_menu.factory_class">kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory</parameter>
+        <parameter key="ktw_database_menu.provider_class">kevintweber\KtwDatabaseMenuBundle\Provider\DatabaseMenuProvider</parameter>
     </parameters>
 
     <services>
-        <service id="ktw_database_menu.factory" class="%ktw_database_menu.factory.class%">
+        <service id="ktw_database_menu.factory" class="%ktw_database_menu.factory_class%">
             <argument type="service" id="router" />
             <argument type="service" id="service_container" />
         </service>
 
-        <service id="ktw_database_menu.menu_provider" class="%ktw_database_menu.menu_provider.class%" public="false">
-            <argument type="service" id="service_container" />
+        <service id="ktw_database_menu.provider" class="%ktw_database_menu.provider_class%">
+            <tag name="knp_menu.provider" />
+            <argument type="service" id="service_container"/>
         </service>
     </services>
 </container>
