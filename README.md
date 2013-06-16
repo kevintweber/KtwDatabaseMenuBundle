@@ -5,8 +5,6 @@ This bundle is a simple extension of the awesome
 [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle), where you can
 store your menu items in a database.
 
-Currently, this bundle is non-functional.
-
 ## Documentation
 
 Read the [documentation for master](https://github.com/kevintweber/KtwDatabaseMenuBundle/blob/master/Resources/doc/index.md).

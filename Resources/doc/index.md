@@ -34,7 +34,7 @@ Composer will install the bundle and it's dependencies to your project's
 
 ### Step 2: Enable the bundle
 
-Enable the bundle in your AppKernel:
+In addition to `KnpMenuBundle`, enable this bundle in your AppKernel:
 
 ``` php
 <?php
@@ -44,19 +44,21 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
+        new Knp\Bundle\MenuBundle\KnpMenuBundle(),
         new kevintweber\KtwDatabaseMenuBundle\KtwDatabaseMenuBundle(),
     );
 }
 ```
-### Step 3: Configure the bundle
 
-@todo
+### Step 3: Update your database schema
 
-### Step 4: Update your database schema
+``` bash
+$ php app/console doctrine:schema:update --force
+```
 
-@todo
+This will add a new table to your database called `ktw_menu_items`.
 
-### Step 5: Clear your cache
+### Step 4: Clear your cache
 
 ``` bash
 $ php app/console cache:clear
@@ -65,3 +67,13 @@ $ php app/console cache:clear
 ## Usage
 
 @todo
+
+## Configuration Reference
+
+All available configuration options are listed below with their default values.
+
+``` yaml
+# app/config/config.yml
+ktw_database_menu:
+    menu_item_repository: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
+```
