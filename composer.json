@@ -18,11 +18,8 @@
         "doctrine/doctrine-bundle": "1.2.*",
         "knplabs/knp-menu": "*@dev",
         "knplabs/knp-menu-bundle": "*@dev",
-		"symfony/routing": "~2.1"       
+	"symfony/routing": "~2.1"       
     },
-	"require-dev": {
-        "pimple/pimple": "1.0.*"
-	},
     "autoload": {
         "psr-0": { 
             "kevintweber\\KtwDatabaseMenuBundle": ""
