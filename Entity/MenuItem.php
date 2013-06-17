@@ -14,6 +14,7 @@ namespace kevintweber\KtwDatabaseMenuBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem as KnpMenuItem;
 
 /**
@@ -113,7 +114,7 @@ class MenuItem extends KnpMenuItem
      * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children", cascade={"all"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $parent;
+    protected $parent = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -172,13 +173,143 @@ class MenuItem extends KnpMenuItem
         $this->updated = new \DateTime;
     }
 
+    /*
+     * Note: Since Knp\Menu uses an array for children, while we use an
+     * ArrayCollection, we must adapt all references to children.
+     */
+
     /**
-     * Reimplementation of getChildren for PersistentCollections.
-     *
-     * @return array
+     * {@inheritDoc}
+     */
+    public function addChild($child, array $options = array())
+    {
+        if (!($child instanceof ItemInterface)) {
+            $child = $this->factory->createItem($child, $options);
+        } elseif (null !== $child->getParent()) {
+            throw new \InvalidArgumentException('Cannot add menu item as child, it already belongs to another menu (e.g. has a parent).');
+        }
+
+        $child->setParent($this);
+
+        $this->children->set($child->getName(), $child);
+
+        return $child;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChild($name)
+    {
+        return $this->children->get($name);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getChildren()
     {
         return $this->children->toArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChildren(array $children)
+    {
+        $this->children = new ArrayCollection($children);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeChild($name)
+    {
+        $name = $name instanceof ItemInterface ? $name->getName() : $name;
+
+        $child = $this->getChild($name);
+        if ($child !== null) {
+            $child->setParent(null);
+            $this->children->remove($name);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFirstChild()
+    {
+        return $this->children->first();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLastChild()
+    {
+        return $this->children->last();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function moveChildToPosition(ItemInterface $child, $position)
+    {
+        $name = $child->getName();
+        $order = $this->children->getKeys();
+
+        $oldPosition = array_search($name, $order);
+        unset($order[$oldPosition]);
+
+        $order = array_values($order);
+
+        array_splice($order, $position, 0, $name);
+        $this->reorderChildren($order);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function reorderChildren($order)
+    {
+        if (count($order) != $this->count()) {
+            throw new \InvalidArgumentException('Cannot reorder children, order does not contain all children.');
+        }
+
+        $newChildren = array();
+
+        foreach ($order as $name) {
+            if (!$this->children->containsKey($name)) {
+                throw new \InvalidArgumentException('Cannot find children named ' . $name);
+            }
+
+            $child = $this->getChild($name);
+            $newChildren[$name] = $child;
+        }
+
+        $this->setChildren($newChildren);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function copy()
+    {
+        $newMenu = clone $this;
+        $newMenu->children = new ArrayCollection();
+        $newMenu->setParent(null);
+        foreach ($this->getChildren() as $child) {
+            $newMenu->addChild($child->copy());
+        }
+
+        return $newMenu;
     }
 }

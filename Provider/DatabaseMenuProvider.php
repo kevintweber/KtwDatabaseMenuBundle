@@ -46,11 +46,11 @@ class DatabaseMenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
-        if ($menuItem = $this->hasMenuItemInCache($name)) {
+        if ($menuItem = $this->getMenuItemInCache($name)) {
             return $menuItem;
         }
 
-        $repositoryName = $this->container()->getParameter('ktw_database_menu.menu_item_repository');
+        $repositoryName = $this->container->getParameter('ktw_database_menu.menu_item_repository');
 
         $menuItem = $this->container->get('doctrine')
             ->getRepository($repositoryName)
@@ -75,7 +75,7 @@ class DatabaseMenuProvider implements MenuProviderInterface
     public function has($name, array $options = array())
     {
         // Check cache first.
-        if ($this->hasMenuItemInCache($name)) {
+        if ($this->getMenuItemInCache($name)) {
             return true;
         }
 
@@ -114,7 +114,7 @@ class DatabaseMenuProvider implements MenuProviderInterface
      * @param string $name
      * @return MenuItem|false False if the named menu item is not in the cache.
      */
-    protected function hasMenuItemInCache($name)
+    protected function getMenuItemInCache($name)
     {
         if (array_key_exists($name, $this->menuItems)) {
             return $this->menuItems[$name];
