@@ -20,7 +20,8 @@ use Knp\Menu\MenuItem as KnpMenuItem;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="ktw_menu_items")
+ * @ORM\Table(name="ktw_menu_items",
+ *     indexes={@ORM\Index(name="uri_idx", columns={"uri"})})
  */
 class MenuItem extends KnpMenuItem
 {
@@ -46,27 +47,6 @@ class MenuItem extends KnpMenuItem
     protected $label = null;
 
     /**
-     * Attributes for the item link
-     *
-     * @ORM\Column(type="array")
-     */
-    protected $linkAttributes = array();
-
-    /**
-     * Attributes for the children list
-     *
-     * @ORM\Column(type="array")
-     */
-    protected $childrenAttributes = array();
-
-    /**
-     * Attributes for the item text
-     *
-     * @ORM\Column(type="array")
-     */
-    protected $labelAttributes = array();
-
-    /**
      * Uri to use in the anchor tag
      *
      * @ORM\Column(type="string", nullable=true)
@@ -74,18 +54,11 @@ class MenuItem extends KnpMenuItem
     protected $uri = null;
 
     /**
-     * Attributes for the item
+     * Array-type data
      *
      * @ORM\Column(type="array")
      */
-    protected $attributes = array();
-
-    /**
-     * Extra stuff associated to the item
-     *
-     * @ORM\Column(type="array")
-     */
-    protected $extras = array();
+    protected $data = array();
 
     /**
      * Whether the item is displayed
@@ -133,6 +106,12 @@ class MenuItem extends KnpMenuItem
     {
         $this->children = new ArrayCollection();
 
+        $this->data = array('attributes' => array(),
+                            'linkAttributes' => array(),
+                            'childrenAttributes' => array(),
+                            'labelAttributes' => array(),
+                            'extras' => array());
+
         parent::__construct($name, $factory);
     }
 
@@ -171,6 +150,242 @@ class MenuItem extends KnpMenuItem
     public function preUpdate()
     {
         $this->updated = new \DateTime;
+    }
+
+    /*
+     * Note: Unlike PHP arrays which are quite light-weight, Doctrine arrays
+     * are quite heavy-weight in the database.  Therefore, we are trying here
+     * to combine several PHP arrays into one Doctrine array.
+     */
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAttributes()
+    {
+        return $this->data['attributes'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->data['attributes'] = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAttribute($name, $default = null)
+    {
+        if (isset($this->data['attributes'][$name])) {
+            return $this->data['attributes'][$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAttribute($name, $value)
+    {
+        $this->data['attributes'][$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLinkAttributes()
+    {
+        return $this->data['linkAttributes'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLinkAttributes(array $linkAttributes)
+    {
+        $this->data['linkAttributes'] = $linkAttributes;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLinkAttribute($name, $default = null)
+    {
+        if (isset($this->data['linkAttributes'][$name])) {
+            return $this->data['linkAttributes'][$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLinkAttribute($name, $value)
+    {
+        $this->data['linkAttributes'][$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenAttributes()
+    {
+        return $this->data['childrenAttributes'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChildrenAttributes(array $childrenAttributes)
+    {
+        $this->data['childrenAttributes'] = $childrenAttributes;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenAttribute($name, $default = null)
+    {
+        if (isset($this->data['childrenAttributes'][$name])) {
+            return $this->data['childrenAttributes'][$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChildrenAttribute($name, $value)
+    {
+        $this->data['childrenAttributes'][$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLabelAttributes()
+    {
+        return $this->data['labelAttributes'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLabelAttributes(array $labelAttributes)
+    {
+        $this->data['labelAttributes'] = $labelAttributes;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLabelAttribute($name, $default = null)
+    {
+        if (isset($this->data['labelAttributes'][$name])) {
+            return $this->data['labelAttributes'][$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLabelAttribute($name, $value)
+    {
+        $this->data['labelAttributes'][$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getExtras()
+    {
+        return $this->data['extras'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setExtras(array $extras)
+    {
+        $this->data['extras'] = $extras;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getExtra($name, $default = null)
+    {
+        if (isset($this->data['extras'][$name])) {
+            return $this->data['extras'][$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setExtra($name, $value)
+    {
+        $this->data['extras'][$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray($depth = null)
+    {
+        $array = array(
+            'name' => $this->name,
+            'label' => $this->label,
+            'uri' => $this->uri,
+            'attributes' => $this->getAttributes(),
+            'labelAttributes' => $this->getLabelAttributes(),
+            'linkAttributes' => $this->getLinkAttributes(),
+            'childrenAttributes' => $this->getChildrenAttributes(),
+            'extras' => $this->getExtras(),
+            'display' => $this->display,
+            'displayChildren' => $this->displayChildren,
+        );
+
+        // export the children as well, unless explicitly disabled
+        if (0 !== $depth) {
+            $childDepth = (null === $depth) ? null : $depth - 1;
+            $array['children'] = array();
+            foreach ($this->children as $key => $child) {
+                $array['children'][$key] = $child->toArray($childDepth);
+            }
+        }
+
+        return $array;
     }
 
     /*

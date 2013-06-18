@@ -9,7 +9,7 @@ Getting Started With KtwDatabaseMenuBundle
 
 ## Installation
 
-You can install this bundle in 5 easy-ish steps.  Let's get started!
+You can install this bundle in 4 easy steps.  Let's get started!
 
 ### Step 1: Download KtwDatabaseMenuBundle using Composer
 
@@ -18,7 +18,22 @@ Add KtwDatabaseMenuBundle into your composer.json
 ``` js
 {
     "require": {
-        "kevintweber/ktw-database-menu-bundle": "*"
+        "kevintweber/ktw-database-menu-bundle": "dev-master"
+    }
+}
+```
+
+Note: Currently, this bundle relies upon the dev-master versions of
+KnpMenuBundle and KnpMenu.  If you are using a composer stability setting
+other than "dev", then you must formally require the dev version of
+these libraries.  You can do this as follows:
+
+``` js
+{
+    "require": {
+        "kevintweber/ktw-database-menu-bundle": "dev-master",
+        "knplabs/knp-menu": "*@dev",
+        "knplabs/knp-menu-bundle": "*@dev"
     }
 }
 ```
