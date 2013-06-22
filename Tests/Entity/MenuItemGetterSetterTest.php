@@ -3,7 +3,7 @@
 namespace kevintweber\KtwDatabaseMenuBundle\Tests\Entity;
 
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
-use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
+use kevintweber\KtwDatabaseMenuBundle\Tests\BaseTestCase;
 
 /**
  * MenuItem getter and setter tests.
@@ -13,7 +13,7 @@ use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
  * KnpMenu/tests/Knp/Menu/Tests/MenuItemGetterSetterTest.php to here.
  * Therefore most of these tests are thanks to stof of KNP Labs.  Thank you.
  */
-class MenuItemGetterSetterTest extends \PHPUnit_Framework_TestCase
+class MenuItemGetterSetterTest extends BaseTestCase
 {
     public function testCreateMenuItemWithEmptyParameter()
     {
@@ -411,14 +411,7 @@ class MenuItemGetterSetterTest extends \PHPUnit_Framework_TestCase
      */
     protected function createMenu($name = 'test_menu', $uri = 'homepage', array $attributes = array())
     {
-        $urlGeneratorInterfaceMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $containerInterfaceMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $containerInterfaceMock->expects($this->any())
-            ->method('getParameter')
-            ->will($this->returnValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem'));
-
-        $factory = new DatabaseMenuFactory($urlGeneratorInterfaceMock,
-                                           $containerInterfaceMock);
+        $factory = $this->buildFactory();
 
         return $factory->createItem($name, array('attributes' => $attributes, 'uri' => $uri));
     }

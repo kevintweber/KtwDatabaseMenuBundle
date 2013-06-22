@@ -3,7 +3,7 @@
 namespace kevintweber\KtwDatabaseMenuBundle\Tests\Entity;
 
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
-use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
+use kevintweber\KtwDatabaseMenuBundle\Tests\BaseTestCase;
 
 /**
  * MenuItem reorder tests.
@@ -13,18 +13,11 @@ use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
  * KnpMenu/tests/Knp/Menu/Tests/MenuItemReorderTest.php to here.
  * Therefore most of these tests are thanks to stof of KNP Labs.  Thank you.
  */
-class MenuItemReorderTest extends \PHPUnit_Framework_TestCase
+class MenuItemReorderTest extends BaseTestCase
 {
     public function testReordering()
     {
-        $urlGeneratorInterfaceMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $containerInterfaceMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $containerInterfaceMock->expects($this->any())
-            ->method('getParameter')
-            ->will($this->returnValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem'));
-
-        $factory = new DatabaseMenuFactory($urlGeneratorInterfaceMock,
-                                           $containerInterfaceMock);
+        $factory = $this->buildFactory();
         $menu = new MenuItem('root', $factory);
         $menu->addChild('c1');
         $menu->addChild('c2');
@@ -53,14 +46,7 @@ class MenuItemReorderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReorderingWithTooManyItemNames()
     {
-        $urlGeneratorInterfaceMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $containerInterfaceMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $containerInterfaceMock->expects($this->any())
-            ->method('getParameter')
-            ->will($this->returnValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem'));
-
-        $factory = new DatabaseMenuFactory($urlGeneratorInterfaceMock,
-                                           $containerInterfaceMock);
+        $factory = $this->buildFactory();
         $menu = new MenuItem('root', $factory);
         $menu->addChild('c1');
         $menu->reorderChildren(array('c1', 'c3'));
@@ -71,14 +57,7 @@ class MenuItemReorderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReorderingWithWrongItemNames()
     {
-        $urlGeneratorInterfaceMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $containerInterfaceMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $containerInterfaceMock->expects($this->any())
-            ->method('getParameter')
-            ->will($this->returnValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem'));
-
-        $factory = new DatabaseMenuFactory($urlGeneratorInterfaceMock,
-                                           $containerInterfaceMock);
+        $factory = $this->buildFactory();
         $menu = new MenuItem('root', $factory);
         $menu->addChild('c1');
         $menu->addChild('c2');

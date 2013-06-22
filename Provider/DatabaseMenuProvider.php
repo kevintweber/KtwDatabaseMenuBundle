@@ -28,12 +28,18 @@ class DatabaseMenuProvider implements MenuProviderInterface
     protected $menuItems;
 
     /**
+     * @var boolean
+     */
+    protected $preloaded;
+
+    /**
      * Constructor
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->menuItems = array();
+        $this->preloaded = false;
     }
 
     /**
@@ -46,12 +52,32 @@ class DatabaseMenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
+        // Query the cache first.
         if ($menuItem = $this->getMenuItemInCache($name)) {
             return $menuItem;
         }
 
-        $repositoryName = $this->container->getParameter('ktw_database_menu.menu_item_repository');
+        // Check if all menu items are already preloaded.
+        if ($this->preloaded) {
+            throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
+        }
 
+        // Get the repository name.
+        $repositoryName = $this->container
+            ->getParameter('ktw_database_menu.menu_item_repository');
+
+        // Check if we need to preload now.
+        if ($this->container->getParameter('ktw_database_menu.preload_menus')) {
+            $this->loadAllMenuItems($repositoryName);
+
+            if ($menuItem = $this->getMenuItemInCache($name)) {
+                return $menuItem;
+            }
+
+            throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
+        }
+
+        // If here, then $preload == false and $name is not cached.  Let's look for it.
         $menuItem = $this->container->get('doctrine')
             ->getRepository($repositoryName)
             ->findOneBy(array('name' => $name));
@@ -75,13 +101,26 @@ class DatabaseMenuProvider implements MenuProviderInterface
     public function has($name, array $options = array())
     {
         // Check cache first.
-        if ($this->getMenuItemInCache($name)) {
+        if ($this->getMenuItemInCache($name) !== false) {
             return true;
         }
 
+        if ($this->preloaded) {
+            return false;
+        }
+
+        // Get the repository name.
         $repositoryName = $this->container
             ->getParameter('ktw_database_menu.menu_item_repository');
 
+        // Check if we need to preload now.
+        if ($this->container->getParameter('ktw_database_menu.preload_menus')) {
+            $this->loadAllMenuItems($repositoryName);
+
+            return $this->getMenuItemInCache($name) !== false;
+        }
+
+        // If here, then $preload == false and $name is not cached.  Let's look for it.
         $menuItem = $this->container->get('doctrine')
             ->getRepository($repositoryName)
             ->findOneBy(array('name' => $name));
@@ -121,5 +160,29 @@ class DatabaseMenuProvider implements MenuProviderInterface
         }
 
         return false;
+    }
+
+    /**
+     * Will load all the menu items into the cache array.
+     *
+     * @param string $repositoryName
+     */
+    protected function loadAllMenuItems($repositoryName)
+    {
+        // Clear the cache array.
+        $this->menuItems = array();
+
+        // Get all the menu items.
+        $menuItems = $this->container->get('doctrine')
+            ->getRepository($repositoryName)
+            ->findAll();
+
+        // Put the items into the cache array.
+        foreach ($menuItems as $item) {
+            $this->menuItems[$item->getName()] = $item;
+        }
+
+        // Set the preloaded flag.
+        $this->preloaded = true;
     }
 }

@@ -91,4 +91,5 @@ All available configuration options are listed below with their default values.
 # app/config/config.yml
 ktw_database_menu:
     menu_item_repository: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
+    preload_menus:        false
 ```

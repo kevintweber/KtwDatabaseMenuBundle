@@ -30,7 +30,8 @@ class KtwDatabaseMenuExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('menu.xml');
 
-        $container->setParameter($this->getAlias() . '.menu_item_repository',
-                                 $config['menu_item_repository']);
+        foreach ($config as $key => $value) {
+            $container->setParameter($this->getAlias() . '.' . $key, $value);
+        }
     }
 }

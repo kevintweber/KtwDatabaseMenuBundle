@@ -3,7 +3,7 @@
 namespace kevintweber\KtwDatabaseMenuBundle\Tests\Entity;
 
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
-use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
+use kevintweber\KtwDatabaseMenuBundle\Tests\BaseTestCase;
 
 class TestMenuItem extends MenuItem {}
 
@@ -15,7 +15,7 @@ class TestMenuItem extends MenuItem {}
  * KnpMenu/tests/Knp/Menu/Tests/MenuItemTreeTest.php to here.
  * Therefore most of these tests are thanks to stof of KNP Labs.  Thank you.
  */
-class MenuItemTreeTest extends \PHPUnit_Framework_TestCase
+class MenuItemTreeTest extends BaseTestCase
 {
     /**
      * @var kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem
@@ -59,14 +59,7 @@ class MenuItemTreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $urlGeneratorInterfaceMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $containerInterfaceMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $containerInterfaceMock->expects($this->any())
-            ->method('getParameter')
-            ->will($this->returnValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem'));
-
-        $factory = new DatabaseMenuFactory($urlGeneratorInterfaceMock,
-                                           $containerInterfaceMock);
+        $factory = $this->buildFactory();
         $this->menu = $factory->createItem('Root li', array('childrenAttributes' => array('class' => 'root')));
         $this->pt1 = $this->menu->addChild('Parent 1');
         $this->ch1 = $this->pt1->addChild('Child 1');
@@ -262,7 +255,7 @@ class MenuItemTreeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->pt2, $this->menu->getLastChild());
     }
 
-    public function testAddChildDoesNotUSeTheFactoryIfItem()
+    public function testAddChildDoesNotUseTheFactoryIfItem()
     {
         $factory = $this->getMock('Knp\Menu\FactoryInterface');
         $factory->expects($this->never())
