@@ -9,7 +9,7 @@ Getting Started With KtwDatabaseMenuBundle
 
 ## Installation
 
-You can install this bundle in 4 easy steps.  Let's get started!
+You can install this bundle in 5 easy steps.  Let's get started!
 
 ### Step 1: Download KtwDatabaseMenuBundle using Composer
 
@@ -18,22 +18,7 @@ Add KtwDatabaseMenuBundle into your composer.json
 ``` js
 {
     "require": {
-        "kevintweber/ktw-database-menu-bundle": "dev-master"
-    }
-}
-```
-
-Note: Currently, this bundle relies upon the dev-master versions of
-KnpMenuBundle and KnpMenu.  If you are using a composer stability setting
-other than "dev", then you must formally require the dev version of
-these libraries.  You can do this as follows:
-
-``` js
-{
-    "require": {
-        "kevintweber/ktw-database-menu-bundle": "dev-master",
-        "knplabs/knp-menu": "*@dev",
-        "knplabs/knp-menu-bundle": "*@dev"
+        "kevintweber/ktw-database-menu-bundle": "~0.1"
     }
 }
 ```
@@ -46,6 +31,22 @@ $ php composer.phar update kevintweber/ktw-database-menu-bundle
 
 Composer will install the bundle and it's dependencies to your project's
 `vendor` directory.
+
+Note: Currently, this bundle relies upon the dev-master versions of
+KnpMenuBundle and KnpMenu.  If you are using a composer stability setting
+other than "dev", then you must formally require the dev version of
+these libraries.  You can do this as follows:
+
+``` js
+{
+    "require": {
+        "kevintweber/ktw-database-menu-bundle": "~0.1",
+        "knplabs/knp-menu": "*@dev",
+        "knplabs/knp-menu-bundle": "*@dev"
+    }
+}
+```
+
 
 ### Step 2: Enable the bundle
 
@@ -79,17 +80,63 @@ This will add a new table to your database called `ktw_menu_items`.
 $ php app/console cache:clear
 ```
 
-## Usage
+### Step 5: Configure the bundle (optional)
 
-@todo
+KtwDatabaseMenuBundle will work just fine without any configuration, so
+you can skip this step if you want.
 
-## Configuration Reference
-
-All available configuration options are listed below with their default values.
+All available configuration options are listed here with their default values:
 
 ``` yaml
 # app/config/config.yml
 ktw_database_menu:
     menu_item_repository: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
     preload_menus:        false
+```
+
+In case you want to extend the functionality of the MenuItem entity, you
+case easily do so with the `menu_item_repository` option.  Just list the
+fully qualified class name.  (Don't forget to run doctrine:schema:update.)
+
+If you only have a few menu items in the database, it may make sense to get
+all the menu items in one query and cache the result.  This will be taken
+care of for you when you set `preload_menus` to `true`.  As a (very) general
+rule of thumb, do not preload when you have more than 100 menu items in the
+database.
+
+## Usage
+
+In your fixtures, you can create menu items just like you would with
+`KnpMenuBundle`:
+
+```php
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerAware;
+
+class LoadTestingData extends ContainerAware implements FixtureInterface
+{
+    public function load(ObjectManager $objectManager)
+    {
+        $factory = $this->container->get('ktw_database_menu.factory');
+
+        $menu = $factory->createItem('root');
+
+        $menu->addChild('Home', array('route' => 'homepage'));
+        $menu->addChild('About Me', array(
+                            'route' => 'page_show',
+                            'routeParameters' => array('id' => 42)));
+
+        // ... add more children
+
+        $objectManager->persist($menu);
+        $objectManager->flush();
+    }
+}
+```
+
+To render the menu, you would use the same procedures as with KnpMenuBundle:
+
+```jinja
+{{ knp_menu_render('root') }}
 ```
