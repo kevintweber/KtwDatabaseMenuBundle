@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('menu_item_repository')
+                ->scalarNode('menu_item_entity')
                     ->defaultValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem')
                 ->end()
                 ->booleanNode('preload_menus')

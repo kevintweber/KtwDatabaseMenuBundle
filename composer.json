@@ -4,7 +4,7 @@
     "keywords": ["menu","database"],
     "homepage": "https://github.com/kevintweber/KtwDatabaseMenuBundle",
     "license": "MIT",
-	"type": "symfony-bundle",
+    "type": "symfony-bundle",
     "authors": [
         {
             "name": "Kevin Weber",
@@ -16,9 +16,8 @@
         "symfony/framework-bundle": "~2.1",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
-        "knplabs/knp-menu": "*@dev",
-        "knplabs/knp-menu-bundle": "*@dev",
-	"symfony/routing": "~2.1"       
+        "knplabs/knp-menu": "2.0.*@dev",
+        "symfony/routing": "~2.1"       
     },
     "autoload": {
         "psr-0": { 

@@ -16,76 +16,67 @@ use kevintweber\KtwDatabaseMenuBundle\Tests\BaseTestCase;
 
 /**
  * DatabaseMenuFactory tests.
- *
- * Since kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory inherits
- * from Knp\Menu\Silex\RouterAwareFactory, I have copied many of the tests
- * from /Knp/Menu/Tests/MenuFactoryTest.php and
- * Knp\Menu\Tests\Silex\RouterAwareFactoryTest.php to here. Therefore most of
- * these tests are thanks to stof of KNP Labs.  Thank you.
  */
 class DatabaseMenuFactoryTest extends BaseTestCase
 {
-    public function testFromArrayWithoutChildren()
+    public function testExtensions()
     {
-        $factory = $this->buildFactory();
+        $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $generatorMock->expects($this->any())
+            ->method('generate')
+            ->with('homepage', array(), false)
+            ->will($this->returnValue('/foobar'));
 
-        $array = array(
-            'name' => 'joe',
-            'uri' => '/foobar',
+        $factory = $this->buildFactory($generatorMock);
+
+        $extension1 = $this->getMock('Knp\Menu\Factory\ExtensionInterface');
+        $extension1->expects($this->once())
+            ->method('buildOptions')
+            ->with(array('foo' => 'bar'))
+            ->will($this->returnValue(array('uri' => 'foobar')));
+        $extension1->expects($this->once())
+            ->method('buildItem')
+            ->with($this->isInstanceOf('Knp\Menu\ItemInterface'), $this->contains('foobar'));
+
+        $factory->addExtension($extension1);
+
+        $extension2 = $this->getMock('Knp\Menu\Factory\ExtensionInterface');
+        $extension2->expects($this->once())
+            ->method('buildOptions')
+            ->with(array('foo' => 'baz'))
+            ->will($this->returnValue(array('foo' => 'bar')));
+        $extension2->expects($this->once())
+            ->method('buildItem')
+            ->with($this->isInstanceOf('Knp\Menu\ItemInterface'), $this->contains('foobar'));
+
+        $factory->addExtension($extension2, 10);
+
+        $item = $factory->createItem('test', array('foo' => 'baz'));
+        $this->assertEquals('foobar', $item->getUri());
+    }
+
+    public function testCreateItem()
+    {
+        $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $generatorMock->expects($this->any())
+            ->method('generate')
+            ->with('homepage', array(), false)
+            ->will($this->returnValue('/foobar'));
+
+        $factory = $this->buildFactory($generatorMock);
+
+        $item = $factory->createItem('test', array(
+            'uri' => 'http://example.com',
+            'linkAttributes' => array('class' => 'foo'),
             'display' => false,
-        );
-        $item = $factory->createFromArray($array);
-        $this->assertEquals('joe', $item->getName());
-        $this->assertEquals('/foobar', $item->getUri());
+            'displayChildren' => false,
+        ));
+
+        $this->assertInstanceOf('Knp\Menu\ItemInterface', $item);
+        $this->assertEquals('test', $item->getName());
         $this->assertFalse($item->isDisplayed());
-        $this->assertEmpty($item->getAttributes());
-        $this->assertEmpty($item->getChildren());
-    }
-
-    public function testFromArrayWithChildren()
-    {
-        $factory = $this->buildFactory();
-
-        $array = array(
-            'name' => 'joe',
-            'children' => array(
-                'jack' => array(
-                    'name' => 'jack',
-                    'label' => 'Jack',
-                ),
-                array(
-                    'name' => 'john'
-                )
-            ),
-        );
-        $item = $factory->createFromArray($array);
-        $this->assertEquals('joe', $item->getName());
-        $this->assertEmpty($item->getAttributes());
-        $this->assertCount(2, $item);
-        $this->assertTrue(isset($item['john']));
-    }
-
-    public function testFromArrayWithChildrenOmittingName()
-    {
-        $factory = $this->buildFactory();
-
-        $array = array(
-            'name' => 'joe',
-            'children' => array(
-                'jack' => array(
-                    'label' => 'Jack',
-                ),
-                'john' => array(
-                    'label' => 'John'
-                )
-            ),
-        );
-        $item = $factory->createFromArray($array);
-        $this->assertEquals('joe', $item->getName());
-        $this->assertEmpty($item->getAttributes());
-        $this->assertCount(2, $item);
-        $this->assertTrue(isset($item['john']));
-        $this->assertTrue(isset($item['jack']));
+        $this->assertFalse($item->getDisplayChildren());
+        $this->assertEquals('foo', $item->getLinkAttribute('class'));
     }
 
     public function testCreateItemWithRoute()
@@ -128,16 +119,5 @@ class DatabaseMenuFactoryTest extends BaseTestCase
 
         $item = $factory->createItem('test_item', array('route' => 'homepage', 'routeAbsolute' => true));
         $this->assertEquals('http://php.net', $item->getUri());
-    }
-
-    public function testCreateItemAppendsRouteUnderExtras()
-    {
-        $factory = $this->buildFactory();
-
-        $item = $factory->createItem('test_item', array('route' => 'homepage'));
-        $this->assertEquals(array('homepage'), $item->getExtra('routes'));
-
-        $item = $factory->createItem('test_item', array('route' => 'homepage', 'extras' => array('routes' => array('other_page'))));
-        $this->assertContains('homepage', $item->getExtra('routes'));
     }
 }

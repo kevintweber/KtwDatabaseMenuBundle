@@ -344,16 +344,6 @@ class MenuItemTreeTest extends BaseTestCase
         $this->assertEquals('http://www.symfony-reloaded.org', $this->menu['child']->getUri());
     }
 
-    /**
-     * @dataProvider getSliceData
-     */
-    public function testSlice($offset, $length, $count, $keys)
-    {
-        $sliced = $this->pt1->slice($offset, $length);
-        $this->assertCount($count, $sliced);
-        $this->assertEquals($keys, array_keys($sliced->getChildren()));
-    }
-
     public function getSliceData()
     {
         $this->setUp();
@@ -368,19 +358,6 @@ class MenuItemTreeTest extends BaseTestCase
             );
     }
 
-    /**
-     * @dataProvider getSplitData
-     */
-    public function testSplit($length, $count, $keys)
-    {
-        $splitted = $this->pt1->split($length);
-        $this->assertArrayHasKey('primary', $splitted);
-        $this->assertArrayHasKey('secondary', $splitted);
-        $this->assertCount($count, $splitted['primary']);
-        $this->assertCount(3 - $count, $splitted['secondary']);
-        $this->assertEquals($keys, array_keys($splitted['primary']->getChildren()));
-    }
-
     public function getSplitData()
     {
         $this->setUp();
@@ -390,84 +367,6 @@ class MenuItemTreeTest extends BaseTestCase
             'named length' => array('Child 3', 2, array($this->ch1->getName(), $this->ch2->getName())),
             'child length' => array($this->ch3, 2, array($this->ch1->getName(), $this->ch2->getName())),
             );
-    }
-
-    public function testPathAsString()
-    {
-        $this->assertEquals('Root li > Parent 2 > Child 4', $this->ch4->getPathAsString(), 'Path with default separator');
-        $this->assertEquals('Root li / Parent 1 / Child 2', $this->ch2->getPathAsString(' / '), 'Path with custom separator');
-    }
-
-    public function testBreadcrumbsArray()
-    {
-        $this->addChildWithExternalUrl();
-        $this->menu->addChild('123', array('uri' => 'http://www.symfony-reloaded.org'));
-
-        $this->assertEquals(
-            array(array('label' => 'Root li', 'uri' => null, 'item' => $this->menu), array('label' => 'Parent 1', 'uri' => null, 'item' => $this->pt1)),
-            $this->pt1->getBreadcrumbsArray()
-            );
-        $this->assertEquals(
-            array(array('label' => 'Root li', 'uri' => null, 'item' => $this->menu), array('label' => 'child', 'uri' => 'http://www.symfony-reloaded.org', 'item' => $this->menu['child'])),
-            $this->menu['child']->getBreadcrumbsArray()
-            );
-        $this->assertEquals(
-            array(
-                array('label' => 'Root li', 'uri' => null, 'item' => $this->menu),
-                array('label' => 'child', 'uri' => 'http://www.symfony-reloaded.org', 'item' => $this->menu['child']),
-                array('label' => 'subitem1', 'uri' => null, 'item' => null),
-                ),
-            $this->menu['child']->getBreadcrumbsArray('subitem1')
-            );
-
-        $item = $this->getMock('Knp\Menu\ItemInterface');
-        $item->expects($this->any())
-            ->method('getLabel')
-            ->will($this->returnValue('mock'));
-        $item->expects($this->any())
-            ->method('getUri')
-            ->will($this->returnValue('foo'));
-
-        $this->assertEquals(
-            array(
-                array('label' => 'Root li', 'uri' => null, 'item' => $this->menu),
-                array('label' => 'child', 'uri' => 'http://www.symfony-reloaded.org', 'item' => $this->menu['child']),
-                array('label' => 'subitem1', 'uri' => null, 'item' => null),
-                array('label' => 'subitem2', 'uri' => null, 'item' => null),
-                array('label' => 'subitem3', 'uri' => 'http://php.net', 'item' => null),
-                array('label' => 'subitem4', 'uri' => null, 'item' => null),
-                array('label' => 'mock', 'uri' => 'foo', 'item' => $item),
-                ),
-            $this->menu['child']->getBreadcrumbsArray(array(
-                                                          'subitem1',
-                                                          'subitem2' => null,
-                                                          'subitem3' => 'http://php.net',
-                                                          array('label' => 'subitem4', 'uri' => null, 'item' => null),
-                                                          $item,
-                                                          ))
-            );
-
-        $this->assertEquals(
-            array(array('label' => 'Root li', 'uri' => null, 'item' => $this->menu), array('label' => '123', 'uri' => 'http://www.symfony-reloaded.org', 'item' => $this->menu['123'])),
-            $this->menu['123']->getBreadcrumbsArray()
-            );
-
-        $this->assertEquals(
-            array(
-                array('label' => 'Root li', 'uri' => null, 'item' => $this->menu),
-                array('label' => 'child', 'uri' => 'http://www.symfony-reloaded.org', 'item' => $this->menu['child']),
-                array('label' => 'mock', 'uri' => 'foo', 'item' => $item),
-                ),
-            $this->menu['child']->getBreadcrumbsArray($item)
-            );
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testBreadcrumbsArrayInvalidData()
-    {
-        $this->pt1->getBreadcrumbsArray(array(new \stdClass()));
     }
 
     protected function addChildWithExternalUrl()

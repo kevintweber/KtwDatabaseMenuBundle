@@ -12,32 +12,63 @@
 namespace kevintweber\KtwDatabaseMenuBundle\Menu;
 
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem as KtwMenuItem;
-use Knp\Menu\Silex\RouterAwareFactory;
+use Knp\Menu\FactoryInterface;
+use Knp\Menu\Factory\CoreExtension;
+use Knp\Menu\Factory\ExtensionInterface;
+use Knp\Menu\Silex\RoutingExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class DatabaseMenuFactory extends RouterAwareFactory
+class DatabaseMenuFactory implements FactoryInterface
 {
     protected $container;
 
     /**
+     * @var \SplPriorityQueue|ExtensionInterface[]
+     */
+    private $extensions;
+
+    /**
      * Constructor
      */
-    public function __construct(UrlGeneratorInterface $generator,
+    public function __construct(ExtensionInterface $routingExtension,
                                 ContainerInterface $container)
     {
         $this->container = $container;
-        parent::__construct($generator);
+        $this->extensions = new \SplPriorityQueue();
+        $this->addExtension(new CoreExtension(), -20);
+        $this->addExtension($routingExtension, -10);
     }
 
+    /**
+     * Creates the menu item.
+     *
+     * @param string $name
+     * @param array  $options
+     */
     public function createItem($name, array $options = array())
     {
-        $class = $this->container->getParameter('ktw_database_menu.menu_item_repository');
+        foreach (clone $this->extensions as $extension) {
+            $options = $extension->buildOptions($options);
+        }
+
+        $class = $this->container->getParameter('ktw_database_menu.menu_item_entity');
         $item = new $class($name, $this);
 
-        $options = $this->buildOptions($options);
-        $this->configureItem($item, $options);
+        foreach (clone $this->extensions as $extension) {
+            $extension->buildItem($item, $options);
+        }
 
         return $item;
+    }
+
+    /**
+     * Adds a factory extension
+     *
+     * @param ExtensionInterface $extension
+     * @param integer $priority
+     */
+    public function addExtension(ExtensionInterface $extension, $priority = 0)
+    {
+        $this->extensions->insert($extension, $priority);
     }
 }

@@ -353,34 +353,6 @@ class MenuItemGetterSetterTest extends BaseTestCase
             );
     }
 
-    public function testCallRecursively()
-    {
-        $menu = $this->createMenu();
-        $child1 = $this->getMock('Knp\Menu\ItemInterface');
-        $child1->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Child 1'))
-            ;
-        $child1->expects($this->once())
-            ->method('callRecursively')
-            ->with('setDisplay', array(false))
-            ;
-        $menu->addChild($child1);
-        $child2 = $this->getMock('Knp\Menu\ItemInterface');
-        $child2->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Child 2'))
-            ;
-        $child2->expects($this->once())
-            ->method('callRecursively')
-            ->with('setDisplay', array(false))
-            ;
-        $menu->addChild($child2);
-
-        $menu->callRecursively('setDisplay', array(false));
-        $this->assertFalse($menu->isDisplayed());
-    }
-
     public function testFactory()
     {
         $child1 = $this->getMock('Knp\Menu\ItemInterface');

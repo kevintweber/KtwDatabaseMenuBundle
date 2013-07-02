@@ -4,7 +4,7 @@ Getting Started With KtwDatabaseMenuBundle
 ## Requirements
 
 * Symfony 2.1+
-* KnpMenuBundle
+* KnpMenu
 * Doctrine
 
 ## Installation
@@ -32,8 +32,9 @@ $ php composer.phar update kevintweber/ktw-database-menu-bundle
 Composer will install the bundle and it's dependencies to your project's
 `vendor` directory.
 
-Note: Currently, this bundle relies upon the dev-master versions of
-KnpMenuBundle and KnpMenu.  If you are using a composer stability setting
+Note: Currently, this bundle relies upon the dev-master (2.0.*@dev)
+versions of KnpMenu.  If you use KnpMenuBundle, you will need the
+2.0.*@dev version of it.  If you are using a composer stability setting
 other than "dev", then you must formally require the dev version of
 these libraries.  You can do this as follows:
 
@@ -41,8 +42,8 @@ these libraries.  You can do this as follows:
 {
     "require": {
         "kevintweber/ktw-database-menu-bundle": "~0.1",
-        "knplabs/knp-menu": "*@dev",
-        "knplabs/knp-menu-bundle": "*@dev"
+        "knplabs/knp-menu": "2.0.*@dev",
+        "knplabs/knp-menu-bundle": "2.0.*@dev"
     }
 }
 ```
@@ -90,12 +91,12 @@ All available configuration options are listed here with their default values:
 ``` yaml
 # app/config/config.yml
 ktw_database_menu:
-    menu_item_repository: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
-    preload_menus:        false
+    menu_item_entity: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
+    preload_menus:    false
 ```
 
 In case you want to extend the functionality of the MenuItem entity, you
-case easily do so with the `menu_item_repository` option.  Just list the
+case easily do so with the `menu_item_entity` option.  Just list the
 fully qualified class name.  (Don't forget to run doctrine:schema:update.)
 
 If you only have a few menu items in the database, it may make sense to get

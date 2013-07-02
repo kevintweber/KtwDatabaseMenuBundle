@@ -64,7 +64,7 @@ class DatabaseMenuProvider implements MenuProviderInterface
 
         // Get the repository name.
         $repositoryName = $this->container
-            ->getParameter('ktw_database_menu.menu_item_repository');
+            ->getParameter('ktw_database_menu.menu_item_entity');
 
         // Check if we need to preload now.
         if ($this->container->getParameter('ktw_database_menu.preload_menus')) {
@@ -111,7 +111,7 @@ class DatabaseMenuProvider implements MenuProviderInterface
 
         // Get the repository name.
         $repositoryName = $this->container
-            ->getParameter('ktw_database_menu.menu_item_repository');
+            ->getParameter('ktw_database_menu.menu_item_entity');
 
         // Check if we need to preload now.
         if ($this->container->getParameter('ktw_database_menu.preload_menus')) {

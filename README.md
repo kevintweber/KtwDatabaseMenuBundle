@@ -2,7 +2,7 @@ KtwDatabaseMenuBundle
 =====================
 
 This bundle is a simple extension of the awesome
-[KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle), where you can
+[KnpMenu](https://github.com/KnpLabs/KnpMenu) library, where you can
 store your menu items in a database.
 
 [![Build Status](https://travis-ci.org/kevintweber/KtwDatabaseMenuBundle.png?branch=master)](https://travis-ci.org/kevintweber/KtwDatabaseMenuBundle)

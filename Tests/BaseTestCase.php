@@ -12,6 +12,7 @@
 namespace kevintweber\KtwDatabaseMenuBundle\Tests;
 
 use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
+use Knp\Menu\Silex\RoutingExtension;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,9 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             $urlGeneratorInterfaceMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         }
 
-        return new DatabaseMenuFactory($urlGeneratorInterfaceMock,
+        $routingExtension = new RoutingExtension($urlGeneratorInterfaceMock);
+
+        return new DatabaseMenuFactory($routingExtension,
                                        $this->getContainerInterfaceMock());
     }
 
@@ -31,7 +34,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $containerInterfaceMock->expects($this->any())
             ->method('getParameter')
             ->with($this->logicalOr(
-                 $this->equalTo('ktw_database_menu.menu_item_repository'),
+                 $this->equalTo('ktw_database_menu.menu_item_entity'),
                  $this->equalTo('ktw_database_menu.preload_menus')
              ))
             ->will($this->returnCallback(array($this, 'getContainerParameter')));
@@ -41,7 +44,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function getContainerParameter($name)
     {
-        if ($name == 'ktw_database_menu.menu_item_repository') {
+        if ($name == 'ktw_database_menu.menu_item_entity') {
             return 'kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem';
         }
 

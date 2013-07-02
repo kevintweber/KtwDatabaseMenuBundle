@@ -472,25 +472,6 @@ class MenuItem extends KnpMenuItem
     /**
      * {@inheritDoc}
      */
-    public function moveChildToPosition(ItemInterface $child, $position)
-    {
-        $name = $child->getName();
-        $order = $this->children->getKeys();
-
-        $oldPosition = array_search($name, $order);
-        unset($order[$oldPosition]);
-
-        $order = array_values($order);
-
-        array_splice($order, $position, 0, $name);
-        $this->reorderChildren($order);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function reorderChildren($order)
     {
         if (count($order) != $this->count()) {
