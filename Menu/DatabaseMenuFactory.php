@@ -20,20 +20,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DatabaseMenuFactory implements FactoryInterface
 {
-    protected $container;
+    protected $menuItemEntityName;
 
     /**
      * @var \SplPriorityQueue|ExtensionInterface[]
      */
-    private $extensions;
+    protected $extensions;
 
     /**
      * Constructor
      */
     public function __construct(ExtensionInterface $routingExtension,
-                                ContainerInterface $container)
+                                $menuItemEntityName)
     {
-        $this->container = $container;
+        $this->menuItemEntityName = $menuItemEntityName;
         $this->extensions = new \SplPriorityQueue();
         $this->addExtension(new CoreExtension(), -20);
         $this->addExtension($routingExtension, -10);
@@ -51,7 +51,7 @@ class DatabaseMenuFactory implements FactoryInterface
             $options = $extension->buildOptions($options);
         }
 
-        $class = $this->container->getParameter('ktw_database_menu.menu_item_entity');
+        $class = $this->menuItemEntityName;
         $item = new $class($name, $this);
 
         foreach (clone $this->extensions as $extension) {

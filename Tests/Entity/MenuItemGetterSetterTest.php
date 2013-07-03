@@ -380,20 +380,4 @@ class MenuItemGetterSetterTest extends BaseTestCase
         // Since we are pre-persist, the result will be null.
         $this->assertNull($menu->getUpdated());
     }
-
-    /**
-     * Create a new MenuItem
-     *
-     * @param string $name
-     * @param string $uri
-     * @param array $attributes
-     *
-     * @return \Knp\Menu\MenuItem
-     */
-    protected function createMenu($name = 'test_menu', $uri = 'homepage', array $attributes = array())
-    {
-        $factory = $this->buildFactory();
-
-        return $factory->createItem($name, array('attributes' => $attributes, 'uri' => $uri));
-    }
 }

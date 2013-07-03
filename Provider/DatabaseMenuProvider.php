@@ -11,6 +11,7 @@
 
 namespace kevintweber\KtwDatabaseMenuBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,9 +19,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DatabaseMenuProvider implements MenuProviderInterface
 {
     /**
-     * @var ServiceContainer
+     * @var EntityManagerInterface
      */
-    protected $container;
+    protected $em;
+
+    /**
+     * @var string
+     */
+    protected $menuItemEntityName;
+
+    /**
+     * @var boolean
+     */
+    protected $preloadMenus;
 
     /**
      * @var array
@@ -34,10 +45,18 @@ class DatabaseMenuProvider implements MenuProviderInterface
 
     /**
      * Constructor
+     *
+     * @param EntityManagerInterface $em
+     * @param string                 $menuItemEntityName
+     * @param string                 $preloadMenus
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(EntityManager $em,
+                                $menuItemEntityName,
+                                $preloadMenus)
     {
-        $this->container = $container;
+        $this->em = $em;
+        $this->menuItemEntityName = $menuItemEntityName;
+        $this->preloadMenus = (boolean) $preloadMenus;
         $this->menuItems = array();
         $this->preloaded = false;
     }
@@ -62,13 +81,9 @@ class DatabaseMenuProvider implements MenuProviderInterface
             throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
         }
 
-        // Get the repository name.
-        $repositoryName = $this->container
-            ->getParameter('ktw_database_menu.menu_item_entity');
-
         // Check if we need to preload now.
-        if ($this->container->getParameter('ktw_database_menu.preload_menus')) {
-            $this->loadAllMenuItems($repositoryName);
+        if ($this->preloadMenus) {
+            $this->loadAllMenuItems();
 
             if ($menuItem = $this->getMenuItemInCache($name)) {
                 return $menuItem;
@@ -78,8 +93,8 @@ class DatabaseMenuProvider implements MenuProviderInterface
         }
 
         // If here, then $preload == false and $name is not cached.  Let's look for it.
-        $menuItem = $this->container->get('doctrine')
-            ->getRepository($repositoryName)
+        $menuItem = $this->em
+            ->getRepository($this->menuItemEntityName)
             ->findOneBy(array('name' => $name));
 
         if ($menuItem === null) {
@@ -109,20 +124,16 @@ class DatabaseMenuProvider implements MenuProviderInterface
             return false;
         }
 
-        // Get the repository name.
-        $repositoryName = $this->container
-            ->getParameter('ktw_database_menu.menu_item_entity');
-
         // Check if we need to preload now.
-        if ($this->container->getParameter('ktw_database_menu.preload_menus')) {
-            $this->loadAllMenuItems($repositoryName);
+        if ($this->preloadMenus) {
+            $this->loadAllMenuItems();
 
             return $this->getMenuItemInCache($name) !== false;
         }
 
         // If here, then $preload == false and $name is not cached.  Let's look for it.
-        $menuItem = $this->container->get('doctrine')
-            ->getRepository($repositoryName)
+        $menuItem = $this->em
+            ->getRepository($this->menuItemEntityName)
             ->findOneBy(array('name' => $name));
 
         if ($menuItem === null) {
@@ -167,14 +178,14 @@ class DatabaseMenuProvider implements MenuProviderInterface
      *
      * @param string $repositoryName
      */
-    protected function loadAllMenuItems($repositoryName)
+    protected function loadAllMenuItems()
     {
         // Clear the cache array.
         $this->menuItems = array();
 
         // Get all the menu items.
-        $menuItems = $this->container->get('doctrine')
-            ->getRepository($repositoryName)
+        $menuItems = $this->em
+            ->getRepository($this->menuItemEntityName)
             ->findAll();
 
         // Put the items into the cache array.

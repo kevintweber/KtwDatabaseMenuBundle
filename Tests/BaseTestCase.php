@@ -12,6 +12,7 @@
 namespace kevintweber\KtwDatabaseMenuBundle\Tests;
 
 use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
+use kevintweber\KtwDatabaseMenuBundle\Provider\DatabaseMenuProvider;
 use Knp\Menu\Silex\RoutingExtension;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
@@ -25,33 +26,24 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $routingExtension = new RoutingExtension($urlGeneratorInterfaceMock);
 
         return new DatabaseMenuFactory($routingExtension,
-                                       $this->getContainerInterfaceMock());
+                                       'kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem');
     }
 
-    protected function getContainerInterfaceMock()
+    /**
+     * Create a new MenuItem
+     *
+     * @param string $name
+     * @param string $uri
+     * @param array $attributes
+     *
+     * @return \Knp\Menu\MenuItem
+     */
+    protected function createMenu($name = 'test_menu',
+                                  $uri = 'homepage',
+                                  array $attributes = array())
     {
-        $containerInterfaceMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $containerInterfaceMock->expects($this->any())
-            ->method('getParameter')
-            ->with($this->logicalOr(
-                 $this->equalTo('ktw_database_menu.menu_item_entity'),
-                 $this->equalTo('ktw_database_menu.preload_menus')
-             ))
-            ->will($this->returnCallback(array($this, 'getContainerParameter')));
+        $factory = $this->buildFactory();
 
-        return $containerInterfaceMock;
-    }
-
-    public function getContainerParameter($name)
-    {
-        if ($name == 'ktw_database_menu.menu_item_entity') {
-            return 'kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem';
-        }
-
-        if ($name == 'ktw_database_menu.preload_menus') {
-            return false;
-        }
-
-        return null;
+        return $factory->createItem($name, array('attributes' => $attributes, 'uri' => $uri));
     }
 }
