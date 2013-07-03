@@ -1,4 +1,4 @@
-## 0.1.1 (2013-07-02)
+## 0.1.1 (2013-07-xx)
 
 * Upgraded to mirror changes in KnpMenu.  Now requires KnpMenu 2.0.*@dev.
   As more stable versions are released, I will change the stability
