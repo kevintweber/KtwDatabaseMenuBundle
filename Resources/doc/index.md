@@ -92,18 +92,11 @@ All available configuration options are listed here with their default values:
 # app/config/config.yml
 ktw_database_menu:
     menu_item_entity: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
-    preload_menus:    false
 ```
 
 In case you want to extend the functionality of the MenuItem entity, you
 case easily do so with the `menu_item_entity` option.  Just list the
 fully qualified class name.  (Don't forget to run doctrine:schema:update.)
-
-If you only have a few menu items in the database, it may make sense to get
-all the menu items in one query and cache the result.  This will be taken
-care of for you when you set `preload_menus` to `true`.  As a (very) general
-rule of thumb, do not preload when you have more than 100 menu items in the
-database.
 
 ## Usage
 

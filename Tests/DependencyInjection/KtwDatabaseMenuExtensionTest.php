@@ -25,6 +25,5 @@ class KtwDatabaseMenuExtensionTest extends \PHPUnit_Framework_TestCase
         $loader = new KtwDatabaseMenuExtension();
         $loader->load(array(array()), $container);
         $this->assertEquals('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem', $container->getParameter('ktw_database_menu.menu_item_entity'));
-        $this->assertFalse($container->getParameter('ktw_database_menu.preload_menus'));
     }
 }

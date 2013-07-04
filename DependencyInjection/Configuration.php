@@ -29,9 +29,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('menu_item_entity')
                     ->defaultValue('kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem')
                 ->end()
-                ->booleanNode('preload_menus')
-                    ->defaultFalse()
-                ->end()
             ->end();
 
         return $treeBuilder;

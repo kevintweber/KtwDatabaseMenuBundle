@@ -24,7 +24,6 @@
         <service id="ktw_database_menu.provider" class="%ktw_database_menu.provider_class%">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument>%ktw_database_menu.menu_item_entity%</argument>
-            <argument>%ktw_database_menu.preload_menus%</argument>
             <tag name="knp_menu.provider" />
         </service>
     </services>

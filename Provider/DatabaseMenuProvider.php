@@ -29,36 +29,22 @@ class DatabaseMenuProvider implements MenuProviderInterface
     protected $menuItemEntityName;
 
     /**
-     * @var boolean
-     */
-    protected $preloadMenus;
-
-    /**
      * @var array
      */
     protected $menuItems;
-
-    /**
-     * @var boolean
-     */
-    protected $preloaded;
 
     /**
      * Constructor
      *
      * @param EntityManagerInterface $em
      * @param string                 $menuItemEntityName
-     * @param string                 $preloadMenus
      */
     public function __construct(EntityManager $em,
-                                $menuItemEntityName,
-                                $preloadMenus)
+                                $menuItemEntityName)
     {
         $this->em = $em;
         $this->menuItemEntityName = $menuItemEntityName;
-        $this->preloadMenus = (boolean) $preloadMenus;
         $this->menuItems = array();
-        $this->preloaded = false;
     }
 
     /**
@@ -76,23 +62,6 @@ class DatabaseMenuProvider implements MenuProviderInterface
             return $menuItem;
         }
 
-        // Check if all menu items are already preloaded.
-        if ($this->preloaded) {
-            throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
-        }
-
-        // Check if we need to preload now.
-        if ($this->preloadMenus) {
-            $this->loadAllMenuItems();
-
-            if ($menuItem = $this->getMenuItemInCache($name)) {
-                return $menuItem;
-            }
-
-            throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
-        }
-
-        // If here, then $preload == false and $name is not cached.  Let's look for it.
         $menuItem = $this->em
             ->getRepository($this->menuItemEntityName)
             ->findOneBy(array('name' => $name));
@@ -120,18 +89,6 @@ class DatabaseMenuProvider implements MenuProviderInterface
             return true;
         }
 
-        if ($this->preloaded) {
-            return false;
-        }
-
-        // Check if we need to preload now.
-        if ($this->preloadMenus) {
-            $this->loadAllMenuItems();
-
-            return $this->getMenuItemInCache($name) !== false;
-        }
-
-        // If here, then $preload == false and $name is not cached.  Let's look for it.
         $menuItem = $this->em
             ->getRepository($this->menuItemEntityName)
             ->findOneBy(array('name' => $name));
@@ -171,29 +128,5 @@ class DatabaseMenuProvider implements MenuProviderInterface
         }
 
         return false;
-    }
-
-    /**
-     * Will load all the menu items into the cache array.
-     *
-     * @param string $repositoryName
-     */
-    protected function loadAllMenuItems()
-    {
-        // Clear the cache array.
-        $this->menuItems = array();
-
-        // Get all the menu items.
-        $menuItems = $this->em
-            ->getRepository($this->menuItemEntityName)
-            ->findAll();
-
-        // Put the items into the cache array.
-        foreach ($menuItems as $item) {
-            $this->menuItems[$item->getName()] = $item;
-        }
-
-        // Set the preloaded flag.
-        $this->preloaded = true;
     }
 }
