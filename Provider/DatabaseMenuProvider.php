@@ -11,27 +11,15 @@
 
 namespace kevintweber\KtwDatabaseMenuBundle\Provider;
 
-use Doctrine\ORM\EntityManager;
-use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
+use kevintweber\KtwDatabaseMenuBundle\Repository\MenuItemRepositoryInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DatabaseMenuProvider implements MenuProviderInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var MenuItemRepositoryInterface
      */
-    protected $em;
-
-    /**
-     * @var string
-     */
-    protected $menuItemEntityName;
-
-    /**
-     * @var array
-     */
-    protected $menuItems;
+    protected $repository;
 
     /**
      * Constructor
@@ -39,12 +27,9 @@ class DatabaseMenuProvider implements MenuProviderInterface
      * @param EntityManagerInterface $em
      * @param string                 $menuItemEntityName
      */
-    public function __construct(EntityManager $em,
-                                $menuItemEntityName)
+    public function __construct(MenuItemRepositoryInterface $menuItemRepository)
     {
-        $this->em = $em;
-        $this->menuItemEntityName = $menuItemEntityName;
-        $this->menuItems = array();
+        $this->repository = $menuItemRepository;
     }
 
     /**
@@ -57,20 +42,11 @@ class DatabaseMenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
-        // Query the cache first.
-        if ($menuItem = $this->getMenuItemInCache($name)) {
-            return $menuItem;
-        }
-
-        $menuItem = $this->em
-            ->getRepository($this->menuItemEntityName)
-            ->findOneBy(array('name' => $name));
+        $menuItem = $this->repository->getMenuItemByName($name);
 
         if ($menuItem === null) {
             throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
         }
-
-        $this->cacheMenuItem($name, $menuItem);
 
         return $menuItem;
     }
@@ -84,49 +60,12 @@ class DatabaseMenuProvider implements MenuProviderInterface
      */
     public function has($name, array $options = array())
     {
-        // Check cache first.
-        if ($this->getMenuItemInCache($name) !== false) {
-            return true;
-        }
-
-        $menuItem = $this->em
-            ->getRepository($this->menuItemEntityName)
-            ->findOneBy(array('name' => $name));
+        $menuItem = $this->repository->getMenuItemByName($name);
 
         if ($menuItem === null) {
             return false;
         }
 
-        $this->cacheMenuItem($name, $menuItem);
-
         return true;
-    }
-
-    /**
-     * Will store the menu item in memory.
-     *
-     * @param string $name
-     * @param MenuItem $menuItem
-     */
-    protected function cacheMenuItem($name, MenuItem $menuItem)
-    {
-        if (!array_key_exists($name, $this->menuItems)) {
-            $this->menuItems[$name] = $menuItem;
-        }
-    }
-
-    /**
-     * Will retrieve a cached menu item.
-     *
-     * @param string $name
-     * @return MenuItem|false False if the named menu item is not in the cache.
-     */
-    protected function getMenuItemInCache($name)
-    {
-        if (array_key_exists($name, $this->menuItems)) {
-            return $this->menuItems[$name];
-        }
-
-        return false;
     }
 }

@@ -8,6 +8,7 @@
         <parameter key="ktw_database_menu.factory_extension.routing_class">Knp\Menu\Silex\RoutingExtension</parameter>
         <parameter key="ktw_database_menu.factory_class">kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory</parameter>
         <parameter key="ktw_database_menu.provider_class">kevintweber\KtwDatabaseMenuBundle\Provider\DatabaseMenuProvider</parameter>
+        <parameter key="ktw_database_menu.menu_item_repository_class">kevintweber\KtwDatabaseMenuBundle\Repository\MenuItemRepository</parameter>
     </parameters>
 
     <services>
@@ -21,9 +22,15 @@
             <argument>%ktw_database_menu.menu_item_entity%</argument>
         </service>
 
+        <service id="ktw_database_menu.menu_item_repository"
+                 class="%ktw_database_menu.menu_item_repository_class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem</argument>
+        </service>
+
         <service id="ktw_database_menu.provider" class="%ktw_database_menu.provider_class%">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument>%ktw_database_menu.menu_item_entity%</argument>
+            <argument type="service" id="ktw_database_menu.menu_item_repository" />
             <tag name="knp_menu.provider" />
         </service>
     </services>

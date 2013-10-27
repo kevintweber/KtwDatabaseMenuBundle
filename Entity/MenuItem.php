@@ -18,7 +18,7 @@ use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem as KnpMenuItem;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="kevintweber\KtwDatabaseMenuBundle\Repository\MenuItemRepository")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="ktw_menu_items",
  *     indexes={@ORM\Index(name="uri_idx", columns={"uri"})})
