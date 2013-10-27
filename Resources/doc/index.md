@@ -41,7 +41,7 @@ these libraries.  You can do this as follows:
 ``` js
 {
     "require": {
-        "kevintweber/ktw-database-menu-bundle": "~0.1",
+        "kevintweber/ktw-database-menu-bundle": "~0.3",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-menu-bundle": "2.0.*@dev"
     }
