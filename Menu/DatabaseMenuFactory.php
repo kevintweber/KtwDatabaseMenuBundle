@@ -15,7 +15,7 @@ use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem as KtwMenuItem;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\Factory\CoreExtension;
 use Knp\Menu\Factory\ExtensionInterface;
-use Knp\Menu\Silex\RoutingExtension;
+use Knp\Menu\Integration\Symfony\RoutingExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DatabaseMenuFactory implements FactoryInterface
