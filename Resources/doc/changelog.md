@@ -1,6 +1,15 @@
 Changelog
 =========
 
+### 0.3.2 (2014-06-21)
+
+* Removed an unnecessary dependency from composer.json.
+* KnpMenu was tag with a beta version we can use.  Modified stability of
+  KnpMenu to beta.  (Hopefully, 2.0 will be released soon.)
+* Updated documentation.
+* Silex routing extension was deprecated.  Upgraded to the symfony routing
+  extension.  (Merge from tubssp)
+
 ### 0.3.1 (2013-12-03)
 
 * Removed some constraints in the composer.json requirements.

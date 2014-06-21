@@ -18,7 +18,7 @@ Add KtwDatabaseMenuBundle into your composer.json
 ``` js
 {
     "require": {
-        "kevintweber/ktw-database-menu-bundle": "~0.1"
+        "kevintweber/ktw-database-menu-bundle": "~0.3"
     }
 }
 ```
@@ -32,9 +32,9 @@ $ php composer.phar update kevintweber/ktw-database-menu-bundle
 Composer will install the bundle and it's dependencies to your project's
 `vendor` directory.
 
-Note: Currently, this bundle relies upon the dev-master (2.0.*@dev)
-versions of KnpMenu.  If you use KnpMenuBundle, you will need the
-2.0.*@dev version of it.  If you are using a composer stability setting
+Note: Currently, this bundle relies upon the beta (2.0@beta)
+version of KnpMenu.  If you use KnpMenuBundle, you will need the
+2.0@dev version of it.  If you are using a composer stability setting
 other than "dev", then you must formally require the dev version of
 these libraries.  You can do this as follows:
 
@@ -42,8 +42,8 @@ these libraries.  You can do this as follows:
 {
     "require": {
         "kevintweber/ktw-database-menu-bundle": "~0.3",
-        "knplabs/knp-menu": "2.0.*@dev",
-        "knplabs/knp-menu-bundle": "2.0.*@dev"
+        "knplabs/knp-menu": "~2.0@beta",
+        "knplabs/knp-menu-bundle": "~2.0@dev"
     }
 }
 ```
@@ -51,7 +51,7 @@ these libraries.  You can do this as follows:
 
 ### Step 2: Enable the bundle
 
-In addition to `KnpMenuBundle`, enable this bundle in your AppKernel:
+Enable this bundle in your AppKernel:
 
 ``` php
 <?php
@@ -61,7 +61,6 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Knp\Bundle\MenuBundle\KnpMenuBundle(),
         new kevintweber\KtwDatabaseMenuBundle\KtwDatabaseMenuBundle(),
     );
 }
