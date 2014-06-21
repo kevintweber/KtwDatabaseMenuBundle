@@ -13,7 +13,7 @@ namespace kevintweber\KtwDatabaseMenuBundle\Tests;
 
 use kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory;
 use kevintweber\KtwDatabaseMenuBundle\Provider\DatabaseMenuProvider;
-use Knp\Menu\Silex\RoutingExtension;
+use Knp\Menu\Integration\Symfony\RoutingExtension;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
