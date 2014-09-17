@@ -508,4 +508,9 @@ class MenuItem extends KnpMenuItem
 
         return $newMenu;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
