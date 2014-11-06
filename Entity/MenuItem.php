@@ -84,7 +84,7 @@ class MenuItem extends KnpMenuItem
     /**
      * Parent item
      *
-     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent = null;
@@ -115,6 +115,16 @@ class MenuItem extends KnpMenuItem
         parent::__construct($name, $factory);
     }
 
+    /**
+     * Getter for 'id'.
+     *
+     * @return mixed The value of 'id'.
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
     /**
      * Getter for 'created'.
      *
