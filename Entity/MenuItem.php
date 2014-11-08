@@ -480,38 +480,6 @@ class MenuItem extends KnpMenuItem
     }
     
     /**
-     * @return mixed
-     */
-    public function getDisplay()
-    {
-        return $this->display;
-    }
-
-    /**
-     * @param mixed $display
-     */
-    public function setDisplay($display)
-    {
-        $this->display = $display;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDisplayChildren()
-    {
-        return $this->displayChildren;
-    }
-
-    /**
-     * @param mixed $displayChildren
-     */
-    public function setDisplayChildren($displayChildren)
-    {
-        $this->displayChildren = $displayChildren;
-    }
-    
-    /**
      * {@inheritDoc}
      */
     public function reorderChildren($order)
