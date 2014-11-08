@@ -480,6 +480,14 @@ class MenuItem extends KnpMenuItem
     }
     
     /**
+     * @return mixed
+     */
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+    
+    /**
      * {@inheritDoc}
      */
     public function reorderChildren($order)
