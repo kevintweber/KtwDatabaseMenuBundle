@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 0.4 (2014-xx-xx)
+
+* Modified stability of KnpMenu.  Now at ~2.0. Woot!
+* Added __toString method to MenuItem entity.  (Merge from resilva)
+
 ### 0.3.2 (2014-06-21)
 
 * Removed an unnecessary dependency from composer.json.

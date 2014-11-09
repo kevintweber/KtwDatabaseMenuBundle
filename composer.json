@@ -16,7 +16,7 @@
         "symfony/framework-bundle": "~2.1",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
-        "knplabs/knp-menu": "~2.0@beta"
+        "knplabs/knp-menu": "~2.0"
     },
     "autoload": {
         "psr-0": {

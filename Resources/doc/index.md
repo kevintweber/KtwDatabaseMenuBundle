@@ -32,23 +32,6 @@ $ php composer.phar update kevintweber/ktw-database-menu-bundle
 Composer will install the bundle and it's dependencies to your project's
 `vendor` directory.
 
-Note: Currently, this bundle relies upon the beta (2.0@beta)
-version of KnpMenu.  If you use KnpMenuBundle, you will need the
-2.0@dev version of it.  If you are using a composer stability setting
-other than "dev", then you must formally require the dev version of
-these libraries.  You can do this as follows:
-
-``` js
-{
-    "require": {
-        "kevintweber/ktw-database-menu-bundle": "~0.3",
-        "knplabs/knp-menu": "~2.0@beta",
-        "knplabs/knp-menu-bundle": "~2.0@dev"
-    }
-}
-```
-
-
 ### Step 2: Enable the bundle
 
 Enable this bundle in your AppKernel:

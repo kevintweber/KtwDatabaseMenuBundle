@@ -112,7 +112,20 @@ class MenuItem extends KnpMenuItem
                             'labelAttributes' => array(),
                             'extras' => array());
 
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
+
         parent::__construct($name, $factory);
+    }
+
+    /**
+     * Getter for 'id'.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -136,20 +149,11 @@ class MenuItem extends KnpMenuItem
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->created = new \DateTime;
-    }
-
-    /**
-     * @ORM\PrePersist
      * @ORM\PreUpdate
      */
     public function preUpdate()
     {
-        $this->updated = new \DateTime;
+        $this->updated = new \DateTime();
     }
 
     /*
