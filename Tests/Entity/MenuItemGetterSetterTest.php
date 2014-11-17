@@ -370,14 +370,14 @@ class MenuItemGetterSetterTest extends BaseTestCase
     public function testGetCreated()
     {
         $menu = $this->createMenu();
-        // Since we are pre-persist, the result will be null.
-        $this->assertNull($menu->getCreated());
+        $this->assertInstanceOf('DateTime', $menu->getCreated());
+        $this->assertEquals(new \DateTime(), $menu->getCreated());
     }
 
     public function testGetUpdated()
     {
         $menu = $this->createMenu();
-        // Since we are pre-persist, the result will be null.
-        $this->assertNull($menu->getUpdated());
+        $this->assertInstanceOf('DateTime', $menu->getUpdated());
+        $this->assertEquals(new \DateTime(), $menu->getUpdated());
     }
 }
