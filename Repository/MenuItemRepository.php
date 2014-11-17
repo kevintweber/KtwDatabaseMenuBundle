@@ -56,8 +56,6 @@ class MenuItemRepository extends EntityRepository implements MenuItemRepositoryI
             $allMenuItems = $this->createQueryBuilder('m')
                 ->addSelect('children')
                 ->leftJoin('m.children', 'children')
-                ->addSelect('grandchildren')
-                ->leftJoin('children.children', 'grandchildren')
                 ->getQuery()
                 ->getResult();
 
