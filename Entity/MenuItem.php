@@ -84,7 +84,7 @@ class MenuItem extends KnpMenuItem
     /**
      * Parent item
      *
-     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent = null;
@@ -471,6 +471,14 @@ class MenuItem extends KnpMenuItem
     public function getLastChild()
     {
         return $this->children->last();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplay()
+    {
+        return $this->display;
     }
 
     /**
