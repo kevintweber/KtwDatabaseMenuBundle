@@ -18,7 +18,7 @@ Add KtwDatabaseMenuBundle into your composer.json
 ``` js
 {
     "require": {
-        "kevintweber/ktw-database-menu-bundle": "~0.3"
+        "kevintweber/ktw-database-menu-bundle": "~0.4"
     }
 }
 ```
@@ -103,7 +103,11 @@ class LoadTestingData extends ContainerAware implements FixtureInterface
                             'route' => 'page_show',
                             'routeParameters' => array('id' => 42)));
 
-        // ... add more children
+        // Another way to add children ...
+        $parentMenuItem = $factory->createItem('Parent', array('route' => 'parent_route'));
+        $parentMenuItem->addChild('Grandchild', array('route' => 'grandchild_route'));
+
+        $menu->addChild($parentMenuItem);
 
         $objectManager->persist($menu);
         $objectManager->flush();
