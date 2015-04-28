@@ -26,7 +26,7 @@
                  class="%ktw_database_menu.menu_item_repository_class%"
                  factory-service="doctrine.orm.entity_manager"
                  factory-method="getRepository">
-            <argument>kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem</argument>
+            <argument>%ktw_database_menu.menu_item_entity%</argument>
         </service>
 
         <service id="ktw_database_menu.provider" class="%ktw_database_menu.provider_class%">
