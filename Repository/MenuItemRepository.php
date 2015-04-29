@@ -16,7 +16,10 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 class MenuItemRepository extends EntityRepository implements MenuItemRepositoryInterface
 {
+    /** @var boolean */
     protected $cacheLoaded;
+    
+    /** @var array */
     protected $nameArray;
 
     /**
@@ -47,7 +50,7 @@ class MenuItemRepository extends EntityRepository implements MenuItemRepositoryI
     /**
      * Will query all the menu items at and sort them for the cache.
      *
-     * @todo Integration with LiipDoctrineCacheBundle
+     * @todo Integration with DoctrineCacheBundle
      */
     protected function populateCache()
     {
