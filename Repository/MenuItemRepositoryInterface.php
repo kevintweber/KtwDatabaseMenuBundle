@@ -15,5 +15,5 @@ use Doctrine\Common\Persistence\ObjectRepository;
 
 interface MenuItemRepositoryInterface extends ObjectRepository
 {
-    public function getMenuItemByname($name);
+    public function getMenuItemByName($name);
 }
