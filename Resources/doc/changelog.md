@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 0.4.1 (2015-05-XX)
+
+* Configuration bugfix by sergekv
+
 ### 0.4 (2014-11-17)
 
 * Modified stability of KnpMenu.  Now at ~2.0. Woot!
