@@ -18,7 +18,7 @@ class MenuItemRepository extends EntityRepository implements MenuItemRepositoryI
 {
     /** @var boolean */
     protected $cacheLoaded;
-    
+
     /** @var array */
     protected $nameArray;
 
@@ -49,17 +49,16 @@ class MenuItemRepository extends EntityRepository implements MenuItemRepositoryI
 
     /**
      * Will query all the menu items at and sort them for the cache.
-     *
-     * @todo Integration with DoctrineCacheBundle
      */
     protected function populateCache()
     {
         if (!$this->cacheLoaded) {
-            // Query three levels deep.
+            // Query two levels deep.
             $allMenuItems = $this->createQueryBuilder('m')
                 ->addSelect('children')
                 ->leftJoin('m.children', 'children')
                 ->getQuery()
+                ->useResultCache(true)
                 ->getResult();
 
             foreach ($allMenuItems as $menuItem) {
