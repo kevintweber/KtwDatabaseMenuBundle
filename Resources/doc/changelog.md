@@ -1,9 +1,10 @@
 Changelog
 =========
 
-### 0.4.1 (2015-05-XX)
+### 0.4.1 (2015-05-02)
 
 * Configuration bugfix by sergekv
+* If you have Doctrine result cache enabled, the MenuItemRepository will now use it.
 
 ### 0.4 (2014-11-17)
 
