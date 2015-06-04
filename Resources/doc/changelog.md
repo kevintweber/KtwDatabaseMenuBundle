@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 0.4.2 (2015-06-04)
+
+* Replaced deprecated DI factory configuration with 3.0 configuration.
+
 ### 0.4.1 (2015-05-02)
 
 * Configuration bugfix by sergekv

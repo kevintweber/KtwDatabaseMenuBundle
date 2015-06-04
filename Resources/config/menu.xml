@@ -23,9 +23,8 @@
         </service>
 
         <service id="ktw_database_menu.menu_item_repository"
-                 class="%ktw_database_menu.menu_item_repository_class%"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
+                 class="%ktw_database_menu.menu_item_repository_class%">
+            <factory service="doctrine.orm.entity_manager" method="getRepository" />
             <argument>%ktw_database_menu.menu_item_entity%</argument>
         </service>
 
