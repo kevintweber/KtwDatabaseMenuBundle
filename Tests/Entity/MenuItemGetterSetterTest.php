@@ -28,6 +28,7 @@ class MenuItemGetterSetterTest extends BaseTestCase
     {
         $menu = $this->createMenu();
         $this->assertTrue($menu instanceof MenuItem);
+        $this->assertNull($menu->getId());
     }
 
     public function testCreateMenuWithNameAndUri()
@@ -49,6 +50,7 @@ class MenuItemGetterSetterTest extends BaseTestCase
         $menu = $this->createMenu();
         $menu->setName('menu name');
         $this->assertEquals('menu name', $menu->getName());
+        $this->assertEquals('menu name', (string) $menu);
     }
 
     public function testLabel()
@@ -86,6 +88,10 @@ class MenuItemGetterSetterTest extends BaseTestCase
         $menu = $this->createMenu(null, null, array('id' => 'test_id'));
         $this->assertEquals('test_id', $menu->getAttribute('id'));
         $this->assertEquals('default_value', $menu->getAttribute('unknown_attribute', 'default_value'));
+        $menu->setAttribute('new_attribute', 'new_value');
+        $this->assertEquals('new_value', $menu->getAttribute('new_attribute'));
+        $menu->setAttribute('new_attribute', 'another_value');
+        $this->assertEquals('another_value', $menu->getAttribute('new_attribute'));
     }
 
     public function testLinkAttributes()
@@ -159,9 +165,10 @@ class MenuItemGetterSetterTest extends BaseTestCase
     public function testDisplay()
     {
         $menu = $this->createMenu();
-        $this->assertEquals(true, $menu->isDisplayed());
+        $this->assertTrue($menu->isDisplayed());
         $menu->setDisplay(false);
-        $this->assertEquals(false, $menu->isDisplayed());
+        $this->assertFalse($menu->isDisplayed());
+        $this->assertFalse($menu->getDisplay());
     }
 
     public function testShowChildren()
@@ -377,7 +384,9 @@ class MenuItemGetterSetterTest extends BaseTestCase
     public function testGetUpdated()
     {
         $menu = $this->createMenu();
+        $this->assertEquals(new \DateTime(), $menu->getUpdated());
         $this->assertInstanceOf('DateTime', $menu->getUpdated());
+        $menu->preUpdate();
         $this->assertEquals(new \DateTime(), $menu->getUpdated());
     }
 }

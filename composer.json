@@ -13,15 +13,14 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.1",
+        "symfony/framework-bundle": "~2.3|~3.0",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "knplabs/knp-menu": "~2.0"
     },
     "autoload": {
-        "psr-0": {
-            "kevintweber\\KtwDatabaseMenuBundle": ""
+        "psr-4": {
+            "kevintweber\\KtwDatabaseMenuBundle\\": ""
         }
-    },
-    "target-dir": "kevintweber/KtwDatabaseMenuBundle"
+    }
 }

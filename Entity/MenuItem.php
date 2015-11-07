@@ -474,7 +474,9 @@ class MenuItem extends KnpMenuItem
     }
 
     /**
-     * @return mixed
+     * Synonymous with 'isDisplayed'.
+     *
+     * @return boolean
      */
     public function getDisplay()
     {

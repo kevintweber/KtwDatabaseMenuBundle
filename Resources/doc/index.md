@@ -3,9 +3,10 @@ Getting Started With KtwDatabaseMenuBundle
 
 ## Requirements
 
-* Symfony 2.1+
-* KnpMenu
-* Doctrine
+* Symfony 2.1+ (or Symfony 3.0+)
+* KnpMenu 2.0+
+* Doctrine 2.2+
+* DoctrineBundle 1.2+
 
 ## Installation
 
@@ -18,7 +19,7 @@ Add KtwDatabaseMenuBundle into your composer.json
 ``` js
 {
     "require": {
-        "kevintweber/ktw-database-menu-bundle": "~0.4"
+        "kevintweber/ktw-database-menu-bundle": "~0.5"
     }
 }
 ```

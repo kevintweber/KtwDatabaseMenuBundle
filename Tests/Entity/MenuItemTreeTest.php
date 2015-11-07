@@ -344,6 +344,12 @@ class MenuItemTreeTest extends BaseTestCase
         $this->assertEquals('http://www.symfony-reloaded.org', $this->menu['child']->getUri());
     }
 
+    public function testCopy()
+    {
+        $menuCopy = $this->menu->copy();
+        $this->assertEquals($menuCopy, $this->menu);
+    }
+
     public function getSliceData()
     {
         $this->setUp();

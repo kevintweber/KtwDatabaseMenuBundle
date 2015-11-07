@@ -1,6 +1,12 @@
 Changelog
 =========
 
+### 0.5 (2015-11-07)
+
+* Added unit tests.  (Code coverage: lines=88%, methods=94%, classes=86%)
+* Transitioned autoloader to PSR4.
+* Added support for Symfony 3.0
+
 ### 0.4.2 (2015-06-04)
 
 * Replaced deprecated DI factory configuration with 3.0 configuration.

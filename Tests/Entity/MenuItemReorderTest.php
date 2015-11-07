@@ -24,6 +24,17 @@ use kevintweber\KtwDatabaseMenuBundle\Tests\BaseTestCase;
  */
 class MenuItemReorderTest extends BaseTestCase
 {
+    public function testReorderChildren()
+    {
+        $factory = $this->buildFactory();
+        $menu = new MenuItem('root', $factory);
+        $menu->addChild('c1');
+        $menu->addChild('c2');
+        $this->assertEquals('c1', $menu->getFirstChild()->getName());
+        $menu->reorderChildren(array('c2', 'c1'));
+        $this->assertEquals('c2', $menu->getFirstChild()->getName());
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
