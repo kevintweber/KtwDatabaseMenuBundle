@@ -74,7 +74,7 @@ All available configuration options are listed here with their default values:
 ``` yaml
 # app/config/config.yml
 ktw_database_menu:
-    menu_item_entity: kevintweber\KtwDatabasemenuBundle\Entity\MenuItem
+    menu_item_entity: kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem
 ```
 
 In case you want to extend the functionality of the MenuItem entity, you
