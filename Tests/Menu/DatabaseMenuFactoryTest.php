@@ -13,6 +13,7 @@ namespace kevintweber\KtwDatabaseMenuBundle\Tests\Menu;
 
 use kevintweber\KtwDatabaseMenuBundle\Entity\MenuItem;
 use kevintweber\KtwDatabaseMenuBundle\Tests\BaseTestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * DatabaseMenuFactory tests.
@@ -24,7 +25,7 @@ class DatabaseMenuFactoryTest extends BaseTestCase
         $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generatorMock->expects($this->any())
             ->method('generate')
-            ->with('homepage', array(), false)
+            ->with('homepage', array())
             ->will($this->returnValue('/foobar'));
 
         $factory = $this->buildFactory($generatorMock);
@@ -60,7 +61,7 @@ class DatabaseMenuFactoryTest extends BaseTestCase
         $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generatorMock->expects($this->any())
             ->method('generate')
-            ->with('homepage', array(), false)
+            ->with('homepage', array())
             ->will($this->returnValue('/foobar'));
 
         $factory = $this->buildFactory($generatorMock);
@@ -83,9 +84,9 @@ class DatabaseMenuFactoryTest extends BaseTestCase
     {
         $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generatorMock->expects($this->once())
-            ->method('generate')
-            ->with('homepage', array(), false)
-            ->will($this->returnValue('/foobar'));
+                      ->method('generate')
+                      ->with('homepage', array(), UrlGeneratorInterface::ABSOLUTE_PATH)
+                      ->will($this->returnValue('/foobar'));
 
         $factory = $this->buildFactory($generatorMock);
 
@@ -98,7 +99,7 @@ class DatabaseMenuFactoryTest extends BaseTestCase
         $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generatorMock->expects($this->once())
             ->method('generate')
-            ->with('homepage', array('id' => 12), false)
+            ->with('homepage', array('id' => 12))
             ->will($this->returnValue('/foobar'));
 
         $factory = $this->buildFactory($generatorMock);
@@ -112,7 +113,7 @@ class DatabaseMenuFactoryTest extends BaseTestCase
         $generatorMock = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generatorMock->expects($this->once())
             ->method('generate')
-            ->with('homepage', array(), true)
+            ->with('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL)
             ->will($this->returnValue('http://php.net'));
 
         $factory = $this->buildFactory($generatorMock);
