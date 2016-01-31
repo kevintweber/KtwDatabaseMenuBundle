@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### (next release)
+
+* Updated unit tests.
+
 ### 0.5 (2015-11-07)
 
 * Added unit tests.  (Code coverage: lines=88%, methods=94%, classes=86%)
