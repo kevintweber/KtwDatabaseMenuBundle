@@ -9,6 +9,7 @@
         <parameter key="ktw_database_menu.factory_class">kevintweber\KtwDatabaseMenuBundle\Menu\DatabaseMenuFactory</parameter>
         <parameter key="ktw_database_menu.provider_class">kevintweber\KtwDatabaseMenuBundle\Provider\DatabaseMenuProvider</parameter>
         <parameter key="ktw_database_menu.menu_item_repository_class">kevintweber\KtwDatabaseMenuBundle\Repository\MenuItemRepository</parameter>
+        <parameter key="ktw_database_menu.mapping_listener_class">kevintweber\KtwDatabaseMenuBundle\EventListener\MappingListener</parameter>
     </parameters>
 
     <services>
@@ -31,6 +32,11 @@
         <service id="ktw_database_menu.provider" class="%ktw_database_menu.provider_class%">
             <argument type="service" id="ktw_database_menu.menu_item_repository" />
             <tag name="knp_menu.provider" />
+        </service>
+
+        <service id="mapping.listener" class="%ktw_database_menu.mapping_listener_class%" public="false">
+            <argument>%ktw_database_menu.table_name%%</argument>
+            <tag name="doctrine.event_listener" event="loadClassMetadata"/>
         </service>
     </services>
 </container>
