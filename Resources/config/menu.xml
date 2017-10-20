@@ -35,7 +35,7 @@
         </service>
 
         <service id="mapping.listener" class="%ktw_database_menu.mapping_listener_class%" public="false">
-            <argument>%ktw_database_menu.table_name%%</argument>
+            <argument>%ktw_database_menu.table_name%</argument>
             <tag name="doctrine.event_listener" event="loadClassMetadata"/>
         </service>
     </services>
